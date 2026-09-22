@@ -204,6 +204,29 @@
     .quote-box blockquote { max-width: 880px; margin: 18px auto; font-size: clamp(1.55rem, 3.3vw, 2.7rem); font-weight: 800; line-height: 1.24; letter-spacing: -.04em; }
     .quote-box cite { color: var(--muted); font-style: normal; font-weight: 650; }
 
+    .feedback { background: var(--cream); }
+    .feedback-grid { display: grid; grid-template-columns: .82fr 1.18fr; gap: 70px; align-items: center; }
+    .feedback-copy h2 { max-width: 520px; }
+    .feedback-copy > p:last-child { max-width: 510px; margin: 20px 0 0; color: var(--muted); }
+    .feedback-card { padding: clamp(26px, 4vw, 42px); border: 1px solid var(--line); border-radius: 32px; background: var(--paper); box-shadow: var(--shadow); }
+    .rating-item { padding: 0 0 28px; border-bottom: 1px solid var(--line); }
+    .rating-item + .rating-item { padding-top: 28px; }
+    .rating-item:last-of-type { border-bottom: 0; }
+    .rating-item h3 { margin-bottom: 7px; font-size: 1.08rem; line-height: 1.4; }
+    .rating-item p { margin: 0 0 16px; color: var(--muted); font-size: .92rem; }
+    .rating-stars { display: flex; flex-wrap: wrap; gap: 8px; }
+    .rating-star {
+      width: 48px; height: 48px; display: grid; place-items: center; border: 1px solid #d8ddc2;
+      border-radius: 14px; background: white; color: #ccd3b5; font: inherit; font-size: 1.75rem;
+      line-height: 1; cursor: pointer; transition: transform .18s ease, color .18s ease, background .18s ease, border-color .18s ease;
+    }
+    .rating-star:hover { transform: translateY(-2px); border-color: #a9bb51; }
+    .rating-star.selected { color: #9fb52d; background: var(--lime-soft); border-color: #cbd984; }
+    .rating-star:focus-visible { outline: 3px solid rgba(23,72,63,.25); outline-offset: 3px; }
+    .rating-value { min-height: 22px; margin-top: 12px; color: var(--green); font-weight: 750; font-size: .9rem; }
+    .feedback-summary { margin-top: 4px; padding: 15px 17px; border-radius: 16px; background: var(--mint); color: var(--deep); font-weight: 720; }
+    .feedback-note { margin: 12px 2px 0; color: var(--muted); font-size: .78rem; }
+
     .contact { background: var(--deep); color: white; }
     .contact-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 70px; align-items: start; }
     .contact h2 { max-width: 560px; }
@@ -237,12 +260,13 @@
       .menu-open .nav-links { transform: translateY(0); }
       .nav-links a { padding: 13px 16px; }
       .nav-cta { margin: 4px 0 0; text-align: center; }
-      .hero-grid, .section-head, .about-grid, .scenario, .contact-grid { grid-template-columns: 1fr; }
+      .hero-grid, .section-head, .about-grid, .scenario, .feedback-grid, .contact-grid { grid-template-columns: 1fr; }
       .hero { padding-top: 58px; }
       .hero-visual { min-height: 460px; }
       .section-head { gap: 18px; }
       .skill-grid, .resource-grid { grid-template-columns: repeat(2, 1fr); }
       .stop-grid { grid-template-columns: repeat(2, 1fr); }
+      .feedback-grid { gap: 34px; }
       .contact-grid { gap: 36px; }
     }
     @media (max-width: 620px) {
@@ -264,6 +288,7 @@
       .method-panel { padding: 28px 20px; }
       .scenario-prompt { min-height: 330px; }
       .scenario-prompt blockquote { margin-top: 58px; }
+      .rating-star { width: 44px; height: 44px; font-size: 1.55rem; }
       .footer-row { flex-direction: column; align-items: flex-start; }
     }
   </style>
@@ -417,16 +442,55 @@
       </div>
     </section>
 
+    <section class="feedback" id="feedback">
+      <div class="feedback-grid wrap">
+        <div class="feedback-copy reveal">
+          <p class="kicker">05 — Đánh giá</p>
+          <h2>CALM! có hữu ích với bạn không?</h2>
+          <p>Hãy dành vài giây chấm điểm để nhóm biết website đã truyền tải thông tin rõ ràng và tạo hứng thú với khóa học đến mức nào.</p>
+        </div>
+        <div class="feedback-card reveal" aria-label="Đánh giá website CALM!">
+          <article class="rating-item" data-rating-key="information">
+            <h3>Khả năng truyền tải thông tin</h3>
+            <p>Nội dung giúp bạn hiểu rõ mục tiêu và hoạt động của khóa học.</p>
+            <div class="rating-stars" role="group" aria-label="Chấm điểm khả năng truyền tải thông tin">
+              <button class="rating-star" type="button" data-value="1" aria-label="1 sao" aria-pressed="false">★</button>
+              <button class="rating-star" type="button" data-value="2" aria-label="2 sao" aria-pressed="false">★</button>
+              <button class="rating-star" type="button" data-value="3" aria-label="3 sao" aria-pressed="false">★</button>
+              <button class="rating-star" type="button" data-value="4" aria-label="4 sao" aria-pressed="false">★</button>
+              <button class="rating-star" type="button" data-value="5" aria-label="5 sao" aria-pressed="false">★</button>
+            </div>
+            <div class="rating-value" aria-live="polite">Chưa đánh giá</div>
+          </article>
+          <article class="rating-item" data-rating-key="interest">
+            <h3>Mức độ tạo hứng thú</h3>
+            <p>Website khiến bạn muốn tìm hiểu hoặc tham gia khóa học CALM!.</p>
+            <div class="rating-stars" role="group" aria-label="Chấm điểm mức độ tạo hứng thú">
+              <button class="rating-star" type="button" data-value="1" aria-label="1 sao" aria-pressed="false">★</button>
+              <button class="rating-star" type="button" data-value="2" aria-label="2 sao" aria-pressed="false">★</button>
+              <button class="rating-star" type="button" data-value="3" aria-label="3 sao" aria-pressed="false">★</button>
+              <button class="rating-star" type="button" data-value="4" aria-label="4 sao" aria-pressed="false">★</button>
+              <button class="rating-star" type="button" data-value="5" aria-label="5 sao" aria-pressed="false">★</button>
+            </div>
+            <div class="rating-value" aria-live="polite">Chưa đánh giá</div>
+          </article>
+          <div class="feedback-summary" id="feedbackSummary" aria-live="polite">Chọn số sao phù hợp với trải nghiệm của bạn.</div>
+          <p class="feedback-note">Lựa chọn được ghi nhớ trên trình duyệt của bạn.</p>
+        </div>
+      </div>
+    </section>
+
     <section class="contact" id="contact">
       <div class="contact-grid wrap">
         <div class="reveal">
-          <p class="kicker">05 — Liên hệ</p>
+          <p class="kicker">06 — Liên hệ</p>
           <h2>Cùng nhau tạo một khoảng dừng.</h2>
           <p class="contact-copy">Liên hệ với nhóm CALM! để tìm hiểu thêm về khóa học, nội dung thực hành hoặc tài liệu được sử dụng trong dự án.</p>
         </div>
         <div class="contact-card reveal">
           <div class="contact-row"><div class="contact-icon" aria-hidden="true">C!</div><div><small>Nhóm thực hiện</small><div class="team-list"><span>Hoang Phong</span><span>Bui Khanh Linh</span><span>Ha Tuan Hung</span></div></div></div>
           <div class="contact-row"><div class="contact-icon" aria-hidden="true">☎</div><div><small>Số điện thoại</small><a href="tel:+84902638355">0902 638 355</a></div></div>
+          <div class="contact-row"><div class="contact-icon" aria-hidden="true">@</div><div><small>Gmail</small><a href="mailto:hoangthanhphonghl2007@gmail.com">hoangthanhphonghl2007@gmail.com</a></div></div>
           <div class="contact-row"><div class="contact-icon" aria-hidden="true">⌂</div><div><small>Địa chỉ</small><strong>Trường Đại học FPT, Khu Công nghệ cao Hòa Lạc, Thạch Thất, Hà Nội</strong></div></div>
         </div>
       </div>
@@ -473,6 +537,49 @@
       });
     }, { rootMargin: '-28% 0px -62% 0px' });
     sections.forEach(section => sectionObserver.observe(section));
+
+    const ratingItems = [...document.querySelectorAll('.rating-item')];
+    const feedbackSummary = document.getElementById('feedbackSummary');
+    const ratingLabels = ['Rất thấp', 'Thấp', 'Bình thường', 'Tốt', 'Rất tốt'];
+
+    function paintRating(item, value) {
+      const stars = [...item.querySelectorAll('.rating-star')];
+      stars.forEach(star => {
+        const selected = Number(star.dataset.value) <= value;
+        star.classList.toggle('selected', selected);
+        star.setAttribute('aria-pressed', String(Number(star.dataset.value) === value));
+      });
+      item.querySelector('.rating-value').textContent = value
+        ? `${value}/5 sao · ${ratingLabels[value - 1]}`
+        : 'Chưa đánh giá';
+      item.dataset.ratingValue = String(value || '');
+    }
+
+    function updateFeedbackSummary() {
+      const completed = ratingItems.filter(item => Number(item.dataset.ratingValue)).length;
+      feedbackSummary.textContent = completed === ratingItems.length
+        ? 'Cảm ơn bạn! Bạn đã hoàn thành cả hai đánh giá.'
+        : completed === 1
+          ? 'Đã chọn một tiêu chí. Hãy chấm thêm tiêu chí còn lại nhé.'
+          : 'Chọn số sao phù hợp với trải nghiệm của bạn.';
+    }
+
+    ratingItems.forEach(item => {
+      const storageKey = `calm-rating-${item.dataset.ratingKey}`;
+      let savedValue = 0;
+      try { savedValue = Number(localStorage.getItem(storageKey)) || 0; } catch (error) {}
+      paintRating(item, savedValue);
+
+      item.querySelectorAll('.rating-star').forEach(star => {
+        star.addEventListener('click', () => {
+          const value = Number(star.dataset.value);
+          paintRating(item, value);
+          try { localStorage.setItem(storageKey, String(value)); } catch (error) {}
+          updateFeedbackSummary();
+        });
+      });
+    });
+    updateFeedbackSummary();
   </script>
 </body>
 </html>
