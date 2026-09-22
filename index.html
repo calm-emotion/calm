@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17483f">
+  <meta name="description" content="CALM! — Khóa học chuyển hóa cảm xúc dành cho sinh viên.">
+  <title>CALM! — Chuyển hóa cảm xúc</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%2317483f'/%3E%3Cpath d='M20 33c0-8 5-14 12-14s12 6 12 14-5 13-12 13-12-5-12-13Z' fill='none' stroke='%23f8f5ec' stroke-width='5'/%3E%3Cpath d='M29 12h6' stroke='%23d6e586' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: #163e37;
+      --green: #17483f;
+      --deep: #0f342e;
+      --lime: #dbe98b;
+      --lime-soft: #eef4bf;
+      --mint: #d8eee5;
+      --cream: #f7f4ea;
+      --paper: #fffdf7;
+      --line: rgba(22, 62, 55, .16);
+      --muted: #5d716c;
+      --shadow: 0 22px 60px rgba(22, 62, 55, .12);
+      --radius: 28px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background: var(--cream);
+      font-family: "Segoe UI", "Be Vietnam Pro", Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+    }
+    body.menu-open { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    svg { display: block; }
+    .wrap { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+    .skip-link {
+      position: fixed; left: 16px; top: -80px; z-index: 100;
+      background: var(--lime); color: var(--deep); padding: 10px 16px; border-radius: 12px;
+    }
+    .skip-link:focus { top: 12px; }
+
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(247, 244, 234, .88);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid transparent;
+      transition: border-color .25s ease, background .25s ease;
+    }
+    .topbar.scrolled { border-color: var(--line); background: rgba(247, 244, 234, .96); }
+    .nav { height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-weight: 900; font-size: 1.45rem; letter-spacing: -.05em;
+    }
+    .brand-mark {
+      width: 38px; height: 38px; display: grid; place-items: center;
+      color: var(--paper); background: var(--green); border-radius: 13px;
+      box-shadow: 0 8px 24px rgba(23, 72, 63, .2);
+    }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a {
+      padding: 10px 13px; border-radius: 999px; color: var(--muted);
+      font-weight: 650; font-size: .92rem; transition: .2s ease;
+    }
+    .nav-links a:hover, .nav-links a.active { background: var(--paper); color: var(--green); }
+    .nav-cta { background: var(--green) !important; color: white !important; margin-left: 6px; }
+    .menu-toggle {
+      display: none; width: 44px; height: 44px; border: 1px solid var(--line);
+      background: var(--paper); border-radius: 14px; color: var(--green); cursor: pointer;
+    }
+
+    .hero { position: relative; overflow: hidden; padding: 82px 0 74px; }
+    .hero::before {
+      content: ""; position: absolute; width: 540px; height: 540px; right: -190px; top: -210px;
+      border: 100px solid rgba(219, 233, 139, .42); border-radius: 50%; pointer-events: none;
+    }
+    .hero-grid { position: relative; display: grid; grid-template-columns: 1.13fr .87fr; gap: 70px; align-items: center; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px; margin-bottom: 24px;
+      padding: 8px 13px; border: 1px solid var(--line); border-radius: 999px;
+      background: rgba(255,255,255,.55); color: var(--green); font-size: .84rem; font-weight: 760;
+      letter-spacing: .07em; text-transform: uppercase;
+    }
+    .eyebrow-dot { width: 8px; height: 8px; background: #8aa427; border-radius: 50%; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 24px; font-size: clamp(3.8rem, 8.5vw, 7.8rem); line-height: .86; letter-spacing: -.075em; }
+    h1 span { display: block; color: #92aa2e; font-size: .42em; line-height: 1.05; letter-spacing: -.035em; margin-top: 18px; }
+    .hero-copy { max-width: 650px; color: var(--muted); font-size: clamp(1.04rem, 1.5vw, 1.2rem); }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      min-height: 52px; padding: 0 22px; border-radius: 999px; border: 1px solid var(--line);
+      font-weight: 760; transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--green); color: white; border-color: var(--green); box-shadow: 0 12px 30px rgba(23, 72, 63, .2); }
+    .btn-secondary { background: rgba(255,255,255,.62); }
+    .hero-visual { min-height: 500px; position: relative; display: grid; place-items: center; }
+    .orbit {
+      width: min(430px, 90vw); aspect-ratio: 1; position: relative;
+      border: 1px solid rgba(23,72,63,.18); border-radius: 50%;
+      display: grid; place-items: center;
+    }
+    .orbit::before, .orbit::after {
+      content: ""; position: absolute; border-radius: 50%; border: 1px dashed rgba(23,72,63,.17);
+    }
+    .orbit::before { inset: 46px; }
+    .orbit::after { inset: 92px; }
+    .calm-core {
+      width: 180px; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center;
+      background: var(--green); color: var(--paper); box-shadow: var(--shadow);
+      font-size: 2.2rem; font-weight: 900; letter-spacing: -.06em;
+    }
+    .orb {
+      position: absolute; display: grid; place-items: center; text-align: center;
+      width: 112px; height: 112px; padding: 12px; border-radius: 50%;
+      background: var(--paper); border: 1px solid var(--line); box-shadow: 0 14px 34px rgba(22,62,55,.1);
+      color: var(--green); font-weight: 750; font-size: .88rem;
+    }
+    .orb.one { top: 4px; right: 40px; }
+    .orb.two { right: -6px; bottom: 56px; background: var(--lime-soft); }
+    .orb.three { left: 4px; bottom: 34px; }
+    .orb.four { left: -12px; top: 74px; background: var(--mint); }
+    .leaf {
+      position: absolute; width: 68px; height: 32px; background: var(--lime);
+      border-radius: 100% 0 100% 0; transform: rotate(-20deg); right: 22px; top: 90px;
+    }
+
+    section { padding: 96px 0; }
+    .section-head { display: grid; grid-template-columns: .8fr 1.2fr; gap: 50px; align-items: end; margin-bottom: 46px; }
+    .kicker { margin-bottom: 12px; color: #819624; font-size: .82rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+    h2 { margin-bottom: 0; font-size: clamp(2.25rem, 5vw, 4.4rem); line-height: .98; letter-spacing: -.055em; }
+    .section-intro { max-width: 600px; margin: 0; color: var(--muted); font-size: 1.05rem; }
+
+    .about { background: var(--green); color: var(--paper); position: relative; overflow: hidden; }
+    .about::after {
+      content: "CALM!"; position: absolute; right: -20px; bottom: -90px; opacity: .045;
+      font-size: 14rem; font-weight: 950; letter-spacing: -.08em; pointer-events: none;
+    }
+    .about .kicker { color: var(--lime); }
+    .about .section-intro { color: #ccdad6; }
+    .about-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 20px; }
+    .about-card { position: relative; z-index: 1; padding: 34px; border: 1px solid rgba(255,255,255,.16); border-radius: var(--radius); background: rgba(255,255,255,.07); }
+    .about-card.feature { background: var(--lime); color: var(--deep); }
+    .about-card h3 { margin-bottom: 12px; font-size: 1.35rem; }
+    .about-card p { margin-bottom: 0; color: inherit; opacity: .82; }
+    .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 20px; }
+    .fact { padding: 22px; border-radius: 22px; background: var(--paper); color: var(--deep); }
+    .fact strong { display: block; font-size: 1.35rem; margin-bottom: 4px; }
+    .fact span { color: var(--muted); font-size: .91rem; }
+
+    .skills { background: var(--paper); }
+    .skill-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .skill-card {
+      min-height: 252px; padding: 28px; display: flex; flex-direction: column;
+      border: 1px solid var(--line); border-radius: var(--radius); background: white;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .skill-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); border-color: transparent; }
+    .skill-card:nth-child(2), .skill-card:nth-child(6) { background: var(--mint); }
+    .skill-card:nth-child(4) { background: var(--lime-soft); }
+    .skill-num { color: #8aa427; font-weight: 850; letter-spacing: .08em; }
+    .skill-card h3 { margin: auto 0 10px; font-size: 1.35rem; line-height: 1.15; }
+    .skill-card p { margin: 0; color: var(--muted); font-size: .94rem; }
+
+    .method { background: var(--cream); }
+    .method-panel { padding: 48px; border-radius: 36px; background: var(--paper); box-shadow: var(--shadow); }
+    .stop-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 34px; }
+    .stop-step { padding: 26px 22px; border-radius: 24px; background: var(--cream); border: 1px solid var(--line); }
+    .stop-step strong { display: block; width: 54px; height: 54px; border-radius: 18px; background: var(--green); color: white; display: grid; place-items: center; font-size: 1.55rem; margin-bottom: 18px; }
+    .stop-step h3 { font-size: 1.05rem; margin-bottom: 7px; }
+    .stop-step p { margin: 0; color: var(--muted); font-size: .9rem; }
+
+    .example { background: var(--lime-soft); }
+    .scenario { display: grid; grid-template-columns: .78fr 1.22fr; gap: 20px; }
+    .scenario-prompt { padding: 36px; border-radius: var(--radius); background: var(--green); color: white; }
+    .scenario-prompt .tag { display: inline-block; padding: 7px 10px; border-radius: 999px; background: rgba(255,255,255,.12); font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .scenario-prompt blockquote { margin: 70px 0 0; font-size: 1.55rem; line-height: 1.35; font-weight: 730; letter-spacing: -.025em; }
+    .response-list { display: grid; gap: 12px; }
+    .response { padding: 24px; border-radius: 22px; background: rgba(255,255,255,.72); border: 1px solid rgba(23,72,63,.12); }
+    .response .label { display: flex; align-items: center; gap: 10px; font-weight: 820; margin-bottom: 7px; }
+    .response .badge { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 10px; color: white; background: #90a637; font-size: .82rem; }
+    .response p { margin: 0; color: var(--muted); }
+
+    .resources { background: var(--paper); }
+    .resource-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .resource-card { padding: 26px; border: 1px solid var(--line); border-radius: 24px; background: white; }
+    .resource-type { color: #849a27; font-size: .78rem; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+    .resource-card h3 { margin: 14px 0 8px; font-size: 1.08rem; line-height: 1.35; }
+    .resource-card p { color: var(--muted); font-size: .89rem; margin-bottom: 18px; }
+    .source-note { padding-top: 15px; border-top: 1px solid var(--line); color: var(--muted); font-size: .82rem; }
+    .placeholder { border-style: dashed; background: var(--cream); }
+    .placeholder h3 { color: var(--muted); }
+
+    .quote-section { padding-top: 0; background: var(--paper); }
+    .quote-box { padding: 70px clamp(28px, 7vw, 90px); border-radius: 36px; text-align: center; background: var(--mint); }
+    .quote-mark { font-size: 4rem; line-height: .8; color: #8ca229; }
+    .quote-box blockquote { max-width: 880px; margin: 18px auto; font-size: clamp(1.55rem, 3.3vw, 2.7rem); font-weight: 800; line-height: 1.24; letter-spacing: -.04em; }
+    .quote-box cite { color: var(--muted); font-style: normal; font-weight: 650; }
+
+    .contact { background: var(--deep); color: white; }
+    .contact-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 70px; align-items: start; }
+    .contact h2 { max-width: 560px; }
+    .contact-copy { margin-top: 22px; color: #c7d7d3; max-width: 520px; }
+    .contact-card { padding: 32px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); border-radius: 28px; }
+    .contact-row { display: grid; grid-template-columns: 44px 1fr; gap: 15px; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,.13); }
+    .contact-row:last-child { border-bottom: 0; }
+    .contact-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 14px; background: var(--lime); color: var(--deep); font-weight: 900; }
+    .contact-row small { display: block; color: #9fb8b2; margin-bottom: 3px; }
+    .contact-row strong, .contact-row a { font-weight: 750; }
+    .team-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .team-list span { padding: 6px 10px; border-radius: 999px; background: rgba(255,255,255,.08); }
+    footer { padding: 28px 0; background: var(--deep); color: #98b2ac; border-top: 1px solid rgba(255,255,255,.08); }
+    .footer-row { display: flex; justify-content: space-between; gap: 20px; align-items: center; }
+    footer strong { color: white; }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+    @media (max-width: 920px) {
+      .menu-toggle { display: grid; place-items: center; }
+      .nav-links {
+        position: fixed; inset: 78px 0 auto; padding: 22px 20px 30px; display: grid; gap: 6px;
+        background: var(--cream); border-bottom: 1px solid var(--line); box-shadow: 0 25px 45px rgba(22,62,55,.12);
+        transform: translateY(-140%); transition: transform .28s ease;
+      }
+      .menu-open .nav-links { transform: translateY(0); }
+      .nav-links a { padding: 13px 16px; }
+      .nav-cta { margin: 4px 0 0; text-align: center; }
+      .hero-grid, .section-head, .about-grid, .scenario, .contact-grid { grid-template-columns: 1fr; }
+      .hero { padding-top: 58px; }
+      .hero-visual { min-height: 460px; }
+      .section-head { gap: 18px; }
+      .skill-grid, .resource-grid { grid-template-columns: repeat(2, 1fr); }
+      .stop-grid { grid-template-columns: repeat(2, 1fr); }
+      .contact-grid { gap: 36px; }
+    }
+    @media (max-width: 620px) {
+      .wrap { width: min(100% - 28px, 1160px); }
+      section { padding: 72px 0; }
+      .hero { padding-bottom: 58px; }
+      h1 { font-size: clamp(3.6rem, 21vw, 5.5rem); }
+      h1 span { font-size: .36em; }
+      .hero-visual { min-height: 350px; }
+      .orbit { width: 315px; }
+      .calm-core { width: 132px; font-size: 1.75rem; }
+      .orb { width: 84px; height: 84px; font-size: .74rem; }
+      .orb.one { right: 24px; }
+      .orb.two { right: -4px; bottom: 34px; }
+      .orb.three { bottom: 18px; }
+      .orb.four { top: 50px; }
+      .leaf { display: none; }
+      .facts, .skill-grid, .resource-grid, .stop-grid { grid-template-columns: 1fr; }
+      .method-panel { padding: 28px 20px; }
+      .scenario-prompt { min-height: 330px; }
+      .scenario-prompt blockquote { margin-top: 58px; }
+      .footer-row { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Đi tới nội dung chính</a>
+  <header class="topbar" id="topbar">
+    <nav class="nav wrap" aria-label="Điều hướng chính">
+      <a class="brand" href="#home" aria-label="CALM! — Trang chủ">
+        <span class="brand-mark" aria-hidden="true">C!</span>
+        <span>CALM!</span>
+      </a>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Mở menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="nav-links" id="navLinks">
+        <a href="#about">Khóa học</a>
+        <a href="#skills">Kỹ năng</a>
+        <a href="#example">Ví dụ</a>
+        <a href="#resources">Tài liệu</a>
+        <a class="nav-cta" href="#contact">Liên hệ</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="home">
+      <div class="hero-grid wrap">
+        <div class="reveal">
+          <div class="eyebrow"><span class="eyebrow-dot"></span>Khóa học chuyển hóa cảm xúc</div>
+          <h1>CALM!<span>Hiểu mình. Chọn cách phản hồi.</span></h1>
+          <p class="hero-copy">Một không gian học tập gần gũi giúp sinh viên nhận diện cảm xúc, tạm dừng trước phản ứng và giao tiếp rõ ràng hơn trong học tập lẫn đời sống.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#about">Khám phá khóa học <span aria-hidden="true">↓</span></a>
+            <a class="btn btn-secondary" href="#resources">Xem tài liệu</a>
+          </div>
+        </div>
+        <div class="hero-visual reveal" aria-label="Bốn năng lực trọng tâm của khóa học">
+          <div class="orbit">
+            <div class="calm-core">CALM!</div>
+            <div class="orb one">Nhận diện</div>
+            <div class="orb two">Thấu hiểu</div>
+            <div class="orb three">Điều chỉnh</div>
+            <div class="orb four">Phản hồi</div>
+          </div>
+          <span class="leaf" aria-hidden="true"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><p class="kicker">01 — Về khóa học</p><h2>Một giờ để bắt đầu hiểu cảm xúc.</h2></div>
+          <p class="section-intro">CALM! không yêu cầu người học phải “luôn tích cực”. Khóa học tập trung vào việc quan sát điều đang diễn ra bên trong, hiểu nhu cầu của mình và chủ động chọn phản ứng phù hợp.</p>
+        </div>
+        <div class="about-grid">
+          <div class="about-card feature reveal">
+            <h3>Mục tiêu học tập</h3>
+            <p>Sau khóa học, người tham gia có thể gọi tên cảm xúc rõ hơn, thực hành kỹ thuật STOP trong tình huống căng thẳng và thử một cách giao tiếp bình tĩnh, tôn trọng hơn.</p>
+            <div class="facts">
+              <div class="fact"><strong>45–60'</strong><span>Thời lượng dự kiến</span></div>
+              <div class="fact"><strong>Thực hành</strong><span>Học qua tình huống</span></div>
+              <div class="fact"><strong>Sinh viên</strong><span>Đối tượng chính</span></div>
+            </div>
+          </div>
+          <div class="about-card reveal">
+            <h3>Khóa học dành cho ai?</h3>
+            <p>Sinh viên muốn quản lý cảm xúc tốt hơn khi học nhóm, thuyết trình, giải quyết mâu thuẫn hoặc đối mặt với áp lực học tập hằng ngày.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="skills" id="skills">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><p class="kicker">02 — Kỹ năng</p><h2>Những gì bạn sẽ luyện tập.</h2></div>
+          <p class="section-intro">Mỗi kỹ năng được trình bày ngắn gọn, có ví dụ và một hoạt động nhỏ để người học có thể áp dụng ngay sau buổi học.</p>
+        </div>
+        <div class="skill-grid">
+          <article class="skill-card reveal"><span class="skill-num">01</span><h3>Nhận diện cảm xúc</h3><p>Quan sát tín hiệu từ cơ thể, suy nghĩ và hành vi trước khi cảm xúc trở nên quá mạnh.</p></article>
+          <article class="skill-card reveal"><span class="skill-num">02</span><h3>Gọi tên chính xác</h3><p>Mở rộng vốn từ cảm xúc để diễn đạt đúng điều mình đang trải qua.</p></article>
+          <article class="skill-card reveal"><span class="skill-num">03</span><h3>Tạm dừng phản ứng</h3><p>Tạo một khoảng dừng ngắn giữa cảm xúc và hành động bằng kỹ thuật STOP.</p></article>
+          <article class="skill-card reveal"><span class="skill-num">04</span><h3>Điều chỉnh cảm xúc</h3><p>Thử những cách phản hồi lành mạnh, thực tế và phù hợp với từng tình huống.</p></article>
+          <article class="skill-card reveal"><span class="skill-num">05</span><h3>Giao tiếp bình tĩnh</h3><p>Nói rõ cảm xúc, nhu cầu và mong muốn mà không công kích người đối diện.</p></article>
+          <article class="skill-card reveal"><span class="skill-num">06</span><h3>Tự phản tư</h3><p>Nhìn lại trải nghiệm để hiểu điều gì đã giúp mình và điều gì cần thay đổi.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="method" id="method">
+      <div class="wrap">
+        <div class="method-panel reveal">
+          <p class="kicker">Công cụ thực hành</p>
+          <h2>Kỹ thuật STOP</h2>
+          <div class="stop-grid">
+            <article class="stop-step"><strong>S</strong><h3>Stop — Dừng lại</h3><p>Chưa phản ứng ngay. Cho bản thân một nhịp ngắn để lấy lại sự chủ động.</p></article>
+            <article class="stop-step"><strong>T</strong><h3>Take a breath — Thở</h3><p>Hít thở chậm, đưa sự chú ý trở lại cơ thể và hiện tại.</p></article>
+            <article class="stop-step"><strong>O</strong><h3>Observe — Quan sát</h3><p>Nhận biết cảm xúc, suy nghĩ, cơ thể và những gì đang diễn ra xung quanh.</p></article>
+            <article class="stop-step"><strong>P</strong><h3>Proceed — Tiếp tục</h3><p>Chọn hành động phù hợp với mục tiêu thay vì chỉ làm theo phản xạ đầu tiên.</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="example" id="example">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><p class="kicker">03 — Tình huống mẫu</p><h2>Từ phản ứng tự động đến lựa chọn có ý thức.</h2></div>
+          <p class="section-intro">Một ví dụ đơn giản để hình dung cách đưa kiến thức vào tình huống thật.</p>
+        </div>
+        <div class="scenario">
+          <div class="scenario-prompt reveal">
+            <span class="tag">Tình huống</span>
+            <blockquote>“Bạn bị một thành viên trong nhóm phê bình ngay trước lớp và cảm thấy tức giận.”</blockquote>
+          </div>
+          <div class="response-list">
+            <article class="response reveal"><div class="label"><span class="badge">1</span>Nhận diện</div><p>Mình đang tức giận, xấu hổ và muốn phản bác ngay lập tức.</p></article>
+            <article class="response reveal"><div class="label"><span class="badge">2</span>Tạm dừng</div><p>Thở chậm, chưa tranh luận ngay và quan sát điều mình thật sự cần làm rõ.</p></article>
+            <article class="response reveal"><div class="label"><span class="badge">3</span>Phản hồi</div><p>“Mình hiểu cậu đang chưa hài lòng. Sau giờ học, hai đứa trao đổi cụ thể để cùng sửa nhé.”</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="resources" id="resources">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><p class="kicker">04 — Tài liệu & nguồn</p><h2>Đọc thêm, học sâu hơn.</h2></div>
+          <p class="section-intro">Danh mục này có thể tiếp tục bổ sung sách, nghiên cứu, video và tài liệu riêng của nhóm CALM!.</p>
+        </div>
+        <div class="resource-grid">
+          <article class="resource-card reveal"><span class="resource-type">Sách</span><h3>Emotional Intelligence</h3><p>Tài liệu nhập môn về trí tuệ cảm xúc và vai trò của năng lực tự nhận thức.</p><div class="source-note">Daniel Goleman · 1995</div></article>
+          <article class="resource-card reveal"><span class="resource-type">Nghiên cứu</span><h3>The Emerging Field of Emotion Regulation</h3><p>Một tài liệu nền tảng về các quá trình điều chỉnh cảm xúc.</p><div class="source-note">James J. Gross · 1998</div></article>
+          <article class="resource-card reveal"><span class="resource-type">Thực hành</span><h3>Kỹ thuật STOP</h3><p>Công cụ chánh niệm ngắn giúp tạo khoảng dừng trước khi hành động.</p><div class="source-note">Nội dung hướng dẫn của CALM!</div></article>
+          <article class="resource-card placeholder reveal"><span class="resource-type">Video</span><h3>Thêm video tại đây</h3><p>Chèn đường dẫn video minh họa hoặc nội dung giảng viên đề xuất.</p><div class="source-note">Đang cập nhật</div></article>
+          <article class="resource-card placeholder reveal"><span class="resource-type">Tài liệu CALM!</span><h3>Thêm tài liệu học viên</h3><p>Phiếu hoạt động, bài tập phản tư hoặc tệp PDF dùng trong khóa học.</p><div class="source-note">Đang cập nhật</div></article>
+          <article class="resource-card placeholder reveal"><span class="resource-type">Nguồn khác</span><h3>Bổ sung nguồn tham khảo</h3><p>Thêm tác giả, năm xuất bản và đường dẫn để bảo đảm tính học thuật.</p><div class="source-note">Đang cập nhật</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="quote-section" aria-label="Thông điệp của CALM!">
+      <div class="wrap">
+        <div class="quote-box reveal">
+          <div class="quote-mark" aria-hidden="true">“</div>
+          <blockquote>Cảm xúc mang đến thông tin. Cách chúng ta phản hồi mới tạo nên sự thay đổi.</blockquote>
+          <cite>Thông điệp từ CALM!</cite>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="contact-grid wrap">
+        <div class="reveal">
+          <p class="kicker">05 — Liên hệ</p>
+          <h2>Cùng nhau tạo một khoảng dừng.</h2>
+          <p class="contact-copy">Liên hệ với nhóm CALM! để tìm hiểu thêm về khóa học, nội dung thực hành hoặc tài liệu được sử dụng trong dự án.</p>
+        </div>
+        <div class="contact-card reveal">
+          <div class="contact-row"><div class="contact-icon" aria-hidden="true">C!</div><div><small>Nhóm thực hiện</small><div class="team-list"><span>Hoang Phong</span><span>Bui Khanh Linh</span><span>Ha Tuan Hung</span></div></div></div>
+          <div class="contact-row"><div class="contact-icon" aria-hidden="true">☎</div><div><small>Số điện thoại</small><a href="tel:+84902638355">0902 638 355</a></div></div>
+          <div class="contact-row"><div class="contact-icon" aria-hidden="true">⌂</div><div><small>Địa chỉ</small><strong>Trường Đại học FPT, Khu Công nghệ cao Hòa Lạc, Thạch Thất, Hà Nội</strong></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-row wrap"><div><strong>CALM!</strong> · Khóa học chuyển hóa cảm xúc</div><div>Recognize · Understand · Transform</div></div>
+  </footer>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    const topbar = document.getElementById('topbar');
+    const navAnchors = [...navLinks.querySelectorAll('a[href^="#"]')];
+
+    menuToggle.addEventListener('click', () => {
+      const open = document.body.classList.toggle('menu-open');
+      menuToggle.setAttribute('aria-expanded', String(open));
+      menuToggle.setAttribute('aria-label', open ? 'Đóng menu' : 'Mở menu');
+    });
+    navAnchors.forEach(link => link.addEventListener('click', () => {
+      document.body.classList.remove('menu-open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.setAttribute('aria-label', 'Mở menu');
+    }));
+    window.addEventListener('scroll', () => topbar.classList.toggle('scrolled', window.scrollY > 10), { passive: true });
+
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    const sections = [...document.querySelectorAll('main section[id]')];
+    const sectionObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        navAnchors.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id));
+      });
+    }, { rootMargin: '-28% 0px -62% 0px' });
+    sections.forEach(section => sectionObserver.observe(section));
+  </script>
+</body>
+</html>
