@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://phonghoanghl2007-hue.github.io/calm/sitemap.xml
